@@ -11,17 +11,24 @@
 #-----------------------------------------------------------
 #start_gui
 
-set proj_name=sd_blk
-set proj_root=.
+# http://qiita.com/ikwzm/items/666dcf3b90c36d16a0ed
 
-create_project sd_blk /home/imagingtechnerd/vivado/2017.1/sd_blk -part xc7z020clg400-3
+set proj_name	"sd_blk"
+set proj_root 	[file dirname [info script]]
+
+create_project $proj_name $proj_root -part xc7z020clg400-3 -force
+#create_project $proj_name $proj_root -part xc7z020clg400-3
+
 set_property board_part krtkl.com:snickerdoodle_black:part0:1.0 [current_project]
-create_bd_design "sd_blk"
+create_bd_design $proj_name
 
-update_compile_order -fileset sources_1
+#update_compile_order -fileset sources_1
 startgroup
-create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.5 processing_system7_0
+create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.5 ps7
 endgroup
+# ----------
+
+
 apply_bd_automation -rule xilinx.com:bd_rule:processing_system7 -config {make_external "FIXED_IO, DDR" apply_board_
 preset "1" Master "Disable" Slave "Disable" }  [get_bd_cells processing_system7_0]
 connect_bd_net [get_bd_pins processing_system7_0/FCLK_CLK0] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK]
@@ -126,7 +133,8 @@ endgroup
 validate_bd_design
 
 # Generate Output Product
-generate_target all [get_files  /home/imagingtechnerd/vivado/2017.1/sd_blk/sd_blk.srcs/sources_1/bd/sd_blk/sd_blk.bd]
+generate_target all [get_files  $proj_root/sd_blk.srcs/sources_1/bd/sd_blk/sd_blk.bd]
+
 catch { config_ip_cache -export [get_ips -all sd_blk_processing_system7_0_0] }
 catch { config_ip_cache -export [get_ips -all sd_blk_xlconcat_0_0] }
 catch { config_ip_cache -export [get_ips -all sd_blk_proc_sys_reset_0_0] }
