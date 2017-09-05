@@ -9,18 +9,40 @@
 # Log file: /home/imagingtechnerd/vivado.log
 # Journal file: /home/imagingtechnerd/vivado.jou
 #-----------------------------------------------------------
-#start_gui
 
-# http://qiita.com/ikwzm/items/666dcf3b90c36d16a0ed
+# Reference: 
+#    http://qiita.com/ikwzm/items/666dcf3b90c36d16a0ed
+#    http://masahir0y.blogspot.jp/2014/01/zynq.html
 
-set proj_name	"sd_blk"
-set proj_root 	[file dirname [info script]]
+set proj_name    "sd_blk"
+set root_dir     [file dirname [info script]]
+set proj_root    $root_dir/vivado
 
+# Create project
 create_project $proj_name $proj_root -part xc7z020clg400-3 -force
 #create_project $proj_name $proj_root -part xc7z020clg400-3
 
+# Set parts
 set_property board_part krtkl.com:snickerdoodle_black:part0:1.0 [current_project]
 create_bd_design $proj_name
+
+# Create Block design
+source ./sd_blk.tcl
+validate_bd_design
+save_bd_design
+
+# Generate Output Product
+generate_target all [get_files  $proj_root/$proj_name.srcs/sources_1/bd/$proj_name/$proj_name.bd]
+
+# Export HW for petalinux
+file mkdir  $proj_root/$proj_name.sdk
+write_hwdef -force  -file $proj_root/$proj_name.sdk/$proj_name_wrapper.hdf
+
+# Export HW for SDSoC HW platform
+archive_project $root_dir/$proj_name.zip -force
+
+# END
+close_project
 
 #update_compile_order -fileset sources_1
 startgroup
@@ -129,11 +151,7 @@ startgroup
 set_property -dict [list CONFIG.PCW_USE_M_AXI_GP0 {0}] [get_bd_cells ps7]
 endgroup
 
-# Validate design
-validate_bd_design
 
-# Generate Output Product
-generate_target all [get_files  $proj_root/sd_blk.srcs/sources_1/bd/sd_blk/sd_blk.bd]
 
 catch { config_ip_cache -export [get_ips -all sd_blk_processing_system7_0_0] }
 catch { config_ip_cache -export [get_ips -all sd_blk_xlconcat_0_0] }
