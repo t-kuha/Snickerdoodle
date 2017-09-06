@@ -12,10 +12,24 @@ source ${PETALINUX_ROOT}/components/yocto/source/arm/layers/core/oe-init-build-e
 export PATH=${PETALINUX_ROOT}/tools/hsm/bin:${PATH}
 export BB_ENV_EXTRAWHITE="$BB_ENV_EXTRAWHITE PETALINUX"
 
-# Get linux Kernel for SDSoC
-wget https://github.com/Xilinx/linux-xlnx/archive/xilinx-v2016.4-sdsoc.tar.gz
-tar xf xilinx-v2016.4-sdsoc.tar.gz
+# Download linux kernel for SDSoC
+KERNEL_SRC_NAME=xilinx-v2016.4-sdsoc.tar.gz
+
+if 
+
+echo "Downloading Linux Kernel source for SDSoC..."
+if [ ! -e download ]; then
+	mkdir -p download 
+fi
+
+if [ ! -f ./download/${KERNEL_SRC_NAME} ]; then
+	wget https://github.com/Xilinx/linux-xlnx/archive/xilinx-v2016.4-sdsoc.tar.gz -O ./download/${KERNEL_SRC_NAME}
+fi
+
+
+tar xf ./download/${KERNEL_SRC_NAME} #-C kernel
 # Untar-ed folder name: linux-xlnx-xilinx-v2016.4-sdsoc
+
 
 # Building
 #rm -rf ${PROJECT_NAME}
