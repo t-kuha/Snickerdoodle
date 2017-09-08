@@ -1,15 +1,3 @@
-#-----------------------------------------------------------
-# Vivado v2017.1_sdx (64-bit)
-# SW Build 1915620 on Thu Jun 22 17:54:59 MDT 2017
-# IP Build 1908669 on Thu Jun 22 19:20:41 MDT 2017
-# Start of session at: Sat Sep  2 05:52:23 2017
-# Process ID: 2487
-# Current directory: /home/imagingtechnerd
-# Command line: vivado
-# Log file: /home/imagingtechnerd/vivado.log
-# Journal file: /home/imagingtechnerd/vivado.jou
-#-----------------------------------------------------------
-
 # Reference: 
 #    http://qiita.com/ikwzm/items/666dcf3b90c36d16a0ed
 #    http://masahir0y.blogspot.jp/2014/01/zynq.html
@@ -17,6 +5,8 @@
 set proj_name    "sd_blk"
 set root_dir     [file dirname [info script]]
 set proj_root    $root_dir/vivado
+
+set bd_file  bd.tcl
 
 # Create project
 create_project $proj_name $proj_root -part xc7z020clg400-3 -force
@@ -27,7 +17,7 @@ set_property board_part krtkl.com:snickerdoodle_black:part0:1.0 [current_project
 create_bd_design $proj_name
 
 # Create Block design
-source ./sd_blk.tcl
+source $bd_file
 validate_bd_design
 save_bd_design
 

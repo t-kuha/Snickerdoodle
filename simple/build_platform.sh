@@ -25,3 +25,6 @@ tar xf ./download/${KERNEL_SRC_NAME} -C
 
 
 # SW Platform
+
+
+# Run SDSoC once to create pre-built data

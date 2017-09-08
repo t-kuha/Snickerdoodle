@@ -1,0 +1,28 @@
+Usage: sdspfm -xpr <vivado_project.xpr> -pfmtcl <platform.tcl> [other options]
+Configuration Options:
+  [-sds-cfg <required options> -sds-end]
+    Required options:
+       -arch <process arch> : [cortex-a9, cortex-a53, cortex-r5, microblaze]
+       -os <OS type> : [standalone, freertos, linux]
+       -name <configuration name>
+       -id <configuration ID>
+       -bif <bif file path>
+       -readme <readme file path>
+       -boot <boot files directory path>
+       -lscript <linker script path> : Only for Standalone/FreeRTOS OSes
+       -image <image directory path> : Only for Linux OSes
+       -inc <include path> : adds path to list of include paths (can use multiple times)
+       -lib <library file path> : adds path to list of library files (can use multiple times)
+       -libfreertos <FreeRTOS library file path> : use custom FreeRTOS library, only for FreeRTOS OSes
+       -incfreertos <FreeRTOS include path> : use custom FreeRTOS includes, only for FreeRTOS OSes
+       -qemu-args <QEMU arguments file>
+Optional Options:
+  -o <output directory>
+  -samples <samples directory path containing template.xml>
+  -prebuilt <prebuilt directory path containing: portinfo.c/h,apsys_0.xml,bitstream.bit,<platform>.hdf,partitions.xml>
+  -force : overwrites output directory if it already exists
+  -cfg : load configuration saved from the GUI
+  -gui : launch the GUI
+  -verbose
+  -version
+  -help
