@@ -16,7 +16,7 @@ PREPARE_SW:
 
 
 HW: 
-	vivado -mode batch -source src/vivado.tcl -nojournal -tclargs $(PF_NAME) 
+	vivado -mode batch -source `pwd`/srcs/vivado.tcl -nojournal -tclargs $(PF_NAME) 
 	
 SW: PREPARE_SW	
 	# Source petalinux & Yocto tools
@@ -35,11 +35,11 @@ PLATFORM: HW SW
 	-desc 'Snickerdoodle Black:Simple SDSoC platform' \
 	-xpr vivado/$(PF_NAME).xpr \
 	-bd $(PF_NAME).bd \
-	-pfmtcl hpfm.tcl \
+	-pfmtcl srcs/hpfm.tcl \
 	-o $(DIR_PF) \
 	-sds-cfg -arch cortex-a9 -os linux -name "Standalone Config 0" \
 	-id config0_0 -rt cpp \
-	-bif src/linux.bif \
+	-bif srcs/linux.bif \
 	-readme src/generic.readme \
 	-boot petalinux/image \
 	-image petalinux/image \

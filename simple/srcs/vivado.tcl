@@ -5,12 +5,12 @@
 # Detect open project
 #close_project
 
-set proj_name    [linexec [$argv 0] ]
+set proj_name    [lindex $argv 0]
 set root_dir     [file dirname [info script]]
 set proj_root    ${root_dir}/vivado
 
-set bd_file      src/bd.tcl
-set hw_pfm       src/hpfm.tcl
+set bd_file      ${root_dir}/bd.tcl
+set hw_pfm       ${root_dir}/hpfm.tcl
 
 # Create project
 create_project ${proj_name} ${proj_root} -part xc7z020clg400-3 -force
