@@ -5,23 +5,23 @@
 # Detect open project
 #close_project
 
-set proj_name    "sd_blk"
+set proj_name    [linexec [$argv 0] ]
 set root_dir     [file dirname [info script]]
 set proj_root    ${root_dir}/vivado
 
-set bd_file      bd.tcl
-set hw_pfm       hpfm.tcl
+set bd_file      src/bd.tcl
+set hw_pfm       src/hpfm.tcl
 
 # Create project
-create_project $proj_name $proj_root -part xc7z020clg400-3 -force
+create_project ${proj_name} ${proj_root} -part xc7z020clg400-3 -force
 #create_project $proj_name $proj_root -part xc7z020clg400-3
 
 # Set parts
 set_property board_part krtkl.com:snickerdoodle_black:part0:1.0 [current_project]
-create_bd_design $proj_name
+create_bd_design ${proj_name}
 
 # Create Block design
-source $bd_file
+source ${bd_file}
 validate_bd_design
 save_bd_design
 
@@ -33,10 +33,10 @@ file mkdir  ${proj_root}/${proj_name}.sdk
 write_hwdef -force -file ${proj_root}/${proj_name}.sdk/${proj_name}_wrapper.hdf
 
 # Export HW for SDSoC HW platform
-source $hw_pfm
+source ${hw_pfm}
 
-# Archive
-archive_project ${root_dir}/${proj_name}.zip -force
+# Archive - Unnecessary (sdspfm handles it)
+#archive_project ${root_dir}/${proj_name}.zip -force
 
 # END
 close_project
