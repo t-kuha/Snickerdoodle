@@ -56,8 +56,8 @@ tar xf ./${DIR_DOWNLOAD}/${KERNEL_SRC_NAME} -C ${DIR_TMP}
 cd ${PROJ_ROOT}
 
 petalinux-create --type project --template zynq --name ${PF_NAME}
-
-petalinux-config --get-hw-description=${DIR_PF_HW}/vivado/${PF_NAME}.sdk/${PF_NAME}_wrapper.hdf
+cd ${PF_NAME}
+petalinux-config --get-hw-description=${DIR_PF_HW}/vivado/${PF_NAME}.sdk
 
 # https://www.xilinx.com/support/answers/69126.html
 # ps7_uart_1 -> ps7_uart_0

@@ -7,7 +7,7 @@
 
 set proj_name    [lindex $argv 0]
 set root_dir     [file dirname [info script]]
-set proj_root    ${root_dir}/vivado
+set proj_root    ${root_dir}/../vivado
 
 set bd_file      ${root_dir}/bd.tcl
 set hw_pfm       ${root_dir}/hpfm.tcl

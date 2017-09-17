@@ -7,11 +7,18 @@ DIR_TMP=tmp
 DIR_DOWNLOAD=download
 KERNEL_SRC_NAME=xilinx-v2016.4-sdsoc.tar.gz
 
-PETALINUX_ROOT=/home/imagingtechnerd/xilinx/2017.1
+PETALINUX_ROOT=/home/imagingtechnerd/xilinx/petalinux
 
 PREPARE_SW:
+#	@ if [ ! -f ./${DIR_DOWNLOAD}/${KERNEL_SRC_NAME} ]; then
+#		wget https://github.com/Xilinx/linux-xlnx/archive/xilinx-v2016.4-sdsoc.tar.gz -O ./${DIR_DOWNLOAD}/${KERNEL_SRC_NAME}
+#	fi
+	KERNEL_SRC_EXIST=$(shell [ -e ./${DIR_DOWNLOAD}/${KERNEL_SRC_NAME} ] && echo 1 || echo 0 )
+ifeq ( ${KERNEL_SRC_EXIST}, 0)
 	mkdir -p ${DIR_DOWNLOAD}
-	wget https://github.com/Xilinx/linux-xlnx/archive/xilinx-v2016.4-sdsoc.tar.gz -O ./${DIR_DOWNLOAD}/${KERNEL_SRC_NAME}
+	wget https://github.com/Xilinx/linux-xlnx/archive/xilinx-v2016.4-sdsoc.tar.gz -O ./${DIR_DOWNLOAD}/${KERNEL_SRC_NAME}		
+endif
+	
 	tar xf ./${DIR_DOWNLOAD}/${KERNEL_SRC_NAME} #-C 
 
 
