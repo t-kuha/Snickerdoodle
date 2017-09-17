@@ -34,7 +34,7 @@ SW: PREPARE_SW
 	export BB_ENV_EXTRAWHITE="$BB_ENV_EXTRAWHITE PETALINUX"
 
 
-PLATFORM: HW SW
+PLATFORM: #HW SW
 	sdspfm \
 	-vendor 'krtkl' \
 	-name $(PF_NAME) \
@@ -47,9 +47,9 @@ PLATFORM: HW SW
 	-sds-cfg -arch cortex-a9 -os linux -name "Standalone Config 0" \
 	-id config0_0 -rt cpp \
 	-bif srcs/linux.bif \
-	-readme src/generic.readme \
-	-boot petalinux/image \
-	-image petalinux/image \
+	-readme srcs/generic.readme \
+	-boot sd_blk/images/linux \
+	-image sd_blk/images/linux \
 	-sds-end 
 
 PREBUILT_PLATFORM:
