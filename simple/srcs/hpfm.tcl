@@ -7,7 +7,6 @@ sdsoc::pfm_clock  $pfm FCLK_CLK1 ps7 1 true ps_rst_1
 sdsoc::pfm_clock  $pfm FCLK_CLK2 ps7 2 false ps_rst_2
 sdsoc::pfm_clock  $pfm FCLK_CLK3 ps7 3 false ps_rst_3
 sdsoc::pfm_axi_port $pfm M_AXI_GP0 ps7 M_AXI_GP
-sdsoc::pfm_axi_port $pfm M_AXI_GP0 ps7 M_AXI_GP
 sdsoc::pfm_axi_port $pfm M_AXI_GP1 ps7 M_AXI_GP
 sdsoc::pfm_axi_port $pfm S_AXI_ACP ps7 S_AXI_ACP
 sdsoc::pfm_axi_port $pfm S_AXI_HP0 ps7 S_AXI_HP
