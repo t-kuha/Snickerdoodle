@@ -1,26 +1,17 @@
 # Makefile
 
+ROOT_DIR=$(shell pwd)
 PF_NAME=sd_blk
 DIR_PF=platform
 DIR_OUTPUT=output
 DIR_TMP=tmp
-DIR_DOWNLOAD=download
-KERNEL_SRC_NAME=xilinx-v2016.4-sdsoc.tar.gz
+#DIR_DOWNLOAD=download
+#KERNEL_SRC_NAME=xilinx-v2016.4-sdsoc.tar.gz
 
 PETALINUX_ROOT=/home/imagingtechnerd/xilinx/petalinux
 
-PREPARE_SW:
-#	@ if [ ! -f ./${DIR_DOWNLOAD}/${KERNEL_SRC_NAME} ]; then
-#		wget https://github.com/Xilinx/linux-xlnx/archive/xilinx-v2016.4-sdsoc.tar.gz -O ./${DIR_DOWNLOAD}/${KERNEL_SRC_NAME}
-#	fi
-	KERNEL_SRC_EXIST=$(shell [ -e ./${DIR_DOWNLOAD}/${KERNEL_SRC_NAME} ] && echo 1 || echo 0 )
-ifeq ( ${KERNEL_SRC_EXIST}, 0)
-	mkdir -p ${DIR_DOWNLOAD}
-	wget https://github.com/Xilinx/linux-xlnx/archive/xilinx-v2016.4-sdsoc.tar.gz -O ./${DIR_DOWNLOAD}/${KERNEL_SRC_NAME}		
-endif
+#PREPARE_SW:
 	
-	tar xf ./${DIR_DOWNLOAD}/${KERNEL_SRC_NAME} #-C 
-
 
 HW: 
 	vivado -mode batch -source `pwd`/srcs/vivado.tcl -nojournal -tclargs $(PF_NAME) 
@@ -32,7 +23,9 @@ SW: PREPARE_SW
 	source ${PETALINUX_ROOT}/components/yocto/source/arm/layers/core/oe-init-build-env
 	export PATH=${PETALINUX_ROOT}/tools/hsm/bin:${PATH}
 	export BB_ENV_EXTRAWHITE="$BB_ENV_EXTRAWHITE PETALINUX"
-
+	
+	petalinux-create -t petalinux -s srcs/sd_blk.bsp
+	petalinux-build -p petalinux
 
 PLATFORM: #HW SW
 	sdspfm \
@@ -52,13 +45,55 @@ PLATFORM: #HW SW
 	-image sd_blk/images/linux \
 	-sds-end 
 
-PREBUILT_PLATFORM:
-	petalinux-build sd_blk.bsp
-	
-
 all: HW SW PLATFORM
-	
+	/bin/echo "Building Snickerdoodle Black SDSoC platform (simple) ..."
 
+
+PREBUILD_PLATFORM:
+	#$(MAKE) -C helloworld clean
+	#$(MAKE) -C helloworld FIRST_PLATFORM=$(ROOT_DIR)/$(DIR_PF)/$(PF_NAME)
+	# Copy necessary files
+	$(eval TMPDIR=$(shell /bin/mktemp -d))
+	/bin/echo $(TMPDIR)
+	/bin/mkdir -p $(TMPDIR)/prebuilt
+	/bin/mkdir -p $(TMPDIR)/image
+	
+	/bin/cp helloworld/_sds/.llvm/apsys_0.xml    $(TMPDIR)/prebuilt
+	/bin/cp helloworld/_sds/.llvm/partitions.xml $(TMPDIR)/prebuilt
+	/bin/cp helloworld/_sds/p0/vpl/system.bit    $(TMPDIR)/prebuilt/bitstream.bit
+	/bin/cp helloworld/_sds/swstubs/portinfo.c   $(TMPDIR)/prebuilt
+	/bin/cp helloworld/_sds/swstubs/portinfo.h   $(TMPDIR)/prebuilt
+	/bin/cp helloworld/_sds/p0/vpl/system.hdf    $(TMPDIR)/prebuilt/sd_blk.hdf
+	
+	/bin/cp sd_blk/images/linux/image.ub         $(TMPDIR)/image
+	
+	#Delete already existing platform directory
+	if [ -e $(DIR_PF)2 ]; then \
+		/bin/rm -r $(DIR_PF)2; \
+	fi
+#	$(eval PF_DIR_EXIST=$(shell [ -e $(DIR_PF)2 ] && echo 1 || echo 0 ))
+#ifeq ($(PF_DIR_EXIST), 1)
+#	/bin/rm -r $(DIR_PF)2	
+#endif
+	
+	# Run sdspfm
+	sdspfm \
+	-vendor 'krtkl' \
+	-name $(PF_NAME) \
+	-version '1.0' \
+	-desc 'Snickerdoodle Black:Simple SDSoC platform' \
+	-xpr vivado/$(PF_NAME).xpr \
+	-bd $(PF_NAME).bd \
+	-pfmtcl srcs/hpfm.tcl \
+	-o $(DIR_PF)2 \
+	-prebuilt $(TMPDIR)/prebuilt \
+	-sds-cfg -arch cortex-a9 -os linux -name "Standalone Config 0" \
+	-id config0_0 -rt cpp \
+	-bif srcs/linux.bif \
+	-boot sd_blk/images/linux \
+	-image $(TMPDIR)/image \
+	-sds-end 
+	
 clean:
 	rm -r vivado
 	rm -r tmp
