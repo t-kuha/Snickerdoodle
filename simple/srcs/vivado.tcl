@@ -7,7 +7,7 @@
 
 set proj_name    [lindex $argv 0]
 set root_dir     [file dirname [info script]]
-set proj_root    ${root_dir}/../vivado
+set proj_root    ${root_dir}/../[lindex $argv 1]
 
 set bd_file      ${root_dir}/bd.tcl
 set hw_pfm       ${root_dir}/hpfm.tcl
@@ -33,7 +33,8 @@ file mkdir  ${proj_root}/${proj_name}.sdk
 write_hwdef -force -file ${proj_root}/${proj_name}.sdk/${proj_name}_wrapper.hdf
 
 # Export HW for SDSoC HW platform
-source ${hw_pfm}
+# Not needed - sdspfm can handle it
+#source ${hw_pfm}
 
 # Archive - Unnecessary (sdspfm handles it)
 #archive_project ${root_dir}/${proj_name}.zip -force

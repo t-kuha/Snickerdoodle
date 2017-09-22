@@ -1,6 +1,6 @@
-set dst sd_blk.hpfm
+set dst vivado/sd_blk.hpfm
 set pfm [sdsoc::create_pfm $dst]
-sdsoc::pfm_name $pfm "krtkl.inc" "xd" "sd_blk" "0.1"
+sdsoc::pfm_name $pfm "krtkl.inc" "xd" "sd_blk" "1.0"
 sdsoc::pfm_description $pfm "Snickerdoodle Black for SDSoC"
 sdsoc::pfm_clock  $pfm FCLK_CLK0 ps7 0 false ps_rst_0
 sdsoc::pfm_clock  $pfm FCLK_CLK1 ps7 1 true ps_rst_1

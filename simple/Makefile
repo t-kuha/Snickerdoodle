@@ -4,6 +4,8 @@
 DIR_ROOT=$(shell pwd)
 # Source files directory
 DIR_SRC=srcs
+# VIvado project directory
+DIR_VIVADO=vivado
 # Output directory of (1st) SDSoC platform
 DIR_PF_FIRST=platform
 # Output directory of (prebuilt) SDSoC platform
@@ -25,13 +27,14 @@ APP=helloworld
 Q ?= @
 
 
-HW: 
-	vivado -mode batch -source `pwd`/$(DIR_SRC)/vivado.tcl -nojournal -tclargs $(PF_NAME)
+HW:
+	$(Q) -rm -rf $(DIR_VIVADO)
+	vivado -mode batch -source $(DIR_ROOT)/$(DIR_SRC)/vivado.tcl -nolog -nojournal -tclargs $(PF_NAME) $(DIR_VIVADO)
 	
 SW:	# HW
 	# Make petalinux project
-	$(MAKE) -C $(DIR_PETALINUX) clean
-	$(MAKE) -C $(DIR_PETALINUX) all
+	$(Q) $(MAKE) -C $(DIR_PETALINUX) clean PROJ_NAME=$(PF_NAME)
+	$(Q) $(MAKE) -C $(DIR_PETALINUX) all   PROJ_NAME=$(PF_NAME)
 
 	# Source petalinux & Yocto tools
 	#$(Q) source ${PETALINUX}/settings.sh
@@ -45,7 +48,7 @@ SW:	# HW
 
 PLATFORM: #SW
 	# Delete already existing platform directory
-	-rm -r $(DIR_PF_FIRST)
+	$(Q) -rm -rf $(DIR_PF_FIRST)
 	#$(Q) if [ -e $(DIR_PF_FIRST) ]; then \
 	#	/bin/rm -r $(DIR_PF_FIRST); \
 	#fi
@@ -68,13 +71,13 @@ PLATFORM: #SW
 	-sds-end 
 
 all: #PLATFORM
-	/bin/echo "Building Snickerdoodle Black SDSoC platform (simple) ..."
+	$(Q) /bin/echo "Building Snickerdoodle Black SDSoC platform (simple) ..."
 
 
 PREBUILD_PLATFORM:	# all
 	# Build sample app & bitstream along the way
-	$(MAKE) -C $(APP) clean
-	$(MAKE) -C $(APP) FIRST_PLATFORM=$(DIR_ROOT)/$(DIR_PF_FIRST)/$(PF_NAME)
+	$(Q) $(MAKE) -C $(APP) clean
+	$(Q) $(MAKE) -C $(APP) FIRST_PLATFORM=$(DIR_ROOT)/$(DIR_PF_FIRST)/$(PF_NAME)
 	
 	# Copy necessary files
 	$(Q) $(eval TMPDIR=$(shell /bin/mktemp -d))
@@ -92,7 +95,7 @@ PREBUILD_PLATFORM:	# all
 	$(Q) /bin/cp $(DIR_PETALINUX)/images/linux/image.ub         $(TMPDIR)/image/
 	
 	#Delete already existing platform directory
-	-rm -r $(DIR_PF_PREBUILT)
+	$(Q) -rm -rf $(DIR_PF_PREBUILT)
 	#$(Q) if [ -e $(DIR_PF)2 ]; then \
 	#	/bin/rm -r $(DIR_PF)2; \
 	#fi
@@ -122,9 +125,9 @@ PREBUILD_PLATFORM:	# all
 	
 
 clean:
-	$(Q) -rm -r vivado
+	$(Q) -rm -rf vivado
 
 superclean:
-	$(Q) -rm -r $(APP)
-	$(Q) -rm -r $(PF_DIR)
+	$(Q) -rm -rf $(APP)
+	$(Q) -rm -rf $(PF_DIR)
 	
