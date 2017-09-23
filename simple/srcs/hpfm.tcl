@@ -1,4 +1,4 @@
-set dst vivado/sd_blk.hpfm
+set dst sd_blk.hpfm
 set pfm [sdsoc::create_pfm $dst]
 sdsoc::pfm_name $pfm "krtkl.inc" "xd" "sd_blk" "1.0"
 sdsoc::pfm_description $pfm "Snickerdoodle Black for SDSoC"

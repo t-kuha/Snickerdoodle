@@ -17,11 +17,7 @@ DIR_PETALINUX=petalinux
 PF_NAME=sd_blk
 
 APP=helloworld
-#DIR_OUTPUT=output
-#DIR_TMP=tmp
-#DIR_DOWNLOAD=download
-#KERNEL_SRC_NAME=xilinx-v2016.4-sdsoc.tar.gz
-#PETALINUX_ROOT := ~/xilinx/petalinux
+
 
 # Comment this line for debugging
 Q ?= @
@@ -31,34 +27,27 @@ HW:
 	$(Q) -rm -rf $(DIR_VIVADO)
 	vivado -mode batch -source $(DIR_ROOT)/$(DIR_SRC)/vivado.tcl -nolog -nojournal -tclargs $(PF_NAME) $(DIR_VIVADO)
 	
-SW:	# HW
+SW: HW
 	# Make petalinux project
 	$(Q) $(MAKE) -C $(DIR_PETALINUX) clean PROJ_NAME=$(PF_NAME)
 	$(Q) $(MAKE) -C $(DIR_PETALINUX) all   PROJ_NAME=$(PF_NAME)
 
-	# Source petalinux & Yocto tools
-	#$(Q) source ${PETALINUX}/settings.sh
-	#$(Q) source ${PETALINUX}/components/yocto/source/arm/environment-setup-cortexa9hf-neon-xilinx-linux-gnueabi
-	#$(Q) source ${PETALINUX}/components/yocto/source/arm/layers/core/oe-init-build-env
-	#$(Q) export PATH=${PETALINUX}/tools/hsm/bin:${PATH}
-	#$(Q) export BB_ENV_EXTRAWHITE="$BB_ENV_EXTRAWHITE PETALINUX"
-	#
-	#petalinux-create -t project -s srcs/sd_blk.bsp
-	#petalinux-build -p $(DIR_PETALINUX)
-
-PLATFORM: #SW
+PLATFORM: SW
 	# Delete already existing platform directory
 	$(Q) -rm -rf $(DIR_PF_FIRST)
-	#$(Q) if [ -e $(DIR_PF_FIRST) ]; then \
-	#	/bin/rm -r $(DIR_PF_FIRST); \
-	#fi
+	
+	# Copy necessary files
+	$(Q) $(eval TMPDIR=$(shell /bin/mktemp -d))
+	$(Q) /bin/mkdir -p $(TMPDIR)/image
+	
+	$(Q) /bin/cp $(DIR_PETALINUX)/$(PF_NAME)/images/linux/image.ub $(TMPDIR)/image/
 	
 	$(Q) sdspfm \
 	-vendor  'krtkl' \
 	-name    $(PF_NAME) \
 	-version '1.0' \
 	-desc    'Snickerdoodle Black:Simple SDSoC platform' \
-	-xpr     vivado/$(PF_NAME).xpr \
+	-xpr     $(DIR_VIVADO)/$(PF_NAME).xpr \
 	-bd      $(PF_NAME).bd \
 	-pfmtcl  $(DIR_SRC)/hpfm.tcl \
 	-o       $(DIR_PF_FIRST) \
@@ -66,8 +55,8 @@ PLATFORM: #SW
 	-id config0_0 -rt cpp \
 	-bif     $(DIR_SRC)/linux.bif \
 	-readme  $(DIR_SRC)/generic.readme \
-	-boot    $(DIR_PETALINUX)/images/linux \
-	-image   $(DIR_PETALINUX)/images/linux \
+	-boot    $(DIR_PETALINUX)/$(PF_NAME)/images/linux \
+	-image   $(TMPDIR)/image \
 	-sds-end 
 
 all: #PLATFORM
@@ -92,17 +81,10 @@ PREBUILD_PLATFORM:	# all
 	$(Q) /bin/cp $(APP)/_sds/swstubs/portinfo.h   $(TMPDIR)/prebuilt/
 	$(Q) /bin/cp $(APP)/_sds/p0/vpl/system.hdf    $(TMPDIR)/prebuilt/sd_blk.hdf
 	
-	$(Q) /bin/cp $(DIR_PETALINUX)/images/linux/image.ub         $(TMPDIR)/image/
+	$(Q) /bin/cp $(DIR_PETALINUX)/$(PF_NAME)/images/linux/image.ub         $(TMPDIR)/image/
 	
 	#Delete already existing platform directory
 	$(Q) -rm -rf $(DIR_PF_PREBUILT)
-	#$(Q) if [ -e $(DIR_PF)2 ]; then \
-	#	/bin/rm -r $(DIR_PF)2; \
-	#fi
-#	$(eval PF_DIR_EXIST=$(shell [ -e $(DIR_PF)2 ] && echo 1 || echo 0 ))
-#ifeq ($(PF_DIR_EXIST), 1)
-#	/bin/rm -r $(DIR_PF)2	
-#endif
 	
 	# Run sdspfm
 	$(Q) sdspfm \
@@ -110,7 +92,7 @@ PREBUILD_PLATFORM:	# all
 	-name     $(PF_NAME) \
 	-version '1.0' \
 	-desc    'Snickerdoodle Black:Simple SDSoC platform' \
-	-xpr      vivado/$(PF_NAME).xpr \
+	-xpr      $(DIR_VIVADO)/$(PF_NAME).xpr \
 	-bd       $(PF_NAME).bd \
 	-pfmtcl   $(DIR_SRC)/hpfm.tcl \
 	-o        $(DIR_PF_PREBUILT) \
@@ -119,15 +101,14 @@ PREBUILD_PLATFORM:	# all
 	-id config0_0 -rt cpp \
 	-bif      $(DIR_SRC)/linux.bif \
 	-readme   $(DIR_SRC)/generic.readme \
-	-boot     $(DIR_PETALINUX)/images/linux \
+	-boot     $(DIR_PETALINUX)/$(PF_NAME)/images/linux \
 	-image    $(TMPDIR)/image \
 	-sds-end 
 	
-
 clean:
-	$(Q) -rm -rf vivado
-
-superclean:
-	$(Q) -rm -rf $(APP)
-	$(Q) -rm -rf $(PF_DIR)
+	$(Q) -rm -rf $(DIR_VIVADO)
+	$(Q) $(MAKE) -C $(DIR_PETALINUX) clean PROJ_NAME=$(PF_NAME)
+	$(Q) $(MAKE) -C $(APP) clean
+	$(Q) -rm -rf $(DIR_PF_FIRST)
+	$(Q) -rm -rf $(DIR_PF_PREBUILT)
 	
