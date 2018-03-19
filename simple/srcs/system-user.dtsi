@@ -1,8 +1,0 @@
-/include/ "system-conf.dtsi"
-/ {
-	xlnk {
-		compatible = "xlnx,xlnk-1.0";
-		clock-names = "clk0", "clk1", "clk2", "clk3";
-		clocks = <&clkc 15>, <&clkc 16>, <&clkc 17>, <&clkc 18>;
-	};
-};
