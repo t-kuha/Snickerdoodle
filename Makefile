@@ -27,3 +27,4 @@ all:
 # Clean all output
 clean:
 	rm -rf vivado
+	rm -rf sdb_simple
