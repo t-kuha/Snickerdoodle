@@ -30,7 +30,7 @@ source ~/petalinux/settings.sh
 petalinux-create -t project -n sdb_simple  --template zynq
 petalinux-config -p sdb_simple --get-hw-description=./vivado/sdb_simple.sdk
 
-# Apply modification for SDSoC platform
+# Apply modification for SDSoC platform according to UG1146 (SDSoC Environment Platform Development Guide)
 petalinux-config -p sdb_simple -c kernel
 petalinux-config -p sdb_simple -c rootfs
 
