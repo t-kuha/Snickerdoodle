@@ -22,7 +22,7 @@ DIR_HW=hello_world
 .PHONY: hw
 hw:
 	$(Q) /bin/echo "... Creating Vivado Project ..."
-	$(Q) vivado -mode batch -source src/vivado/create_vivado_project.tcl
+	$(Q) vivado -mode batch -source $(DIR_SRC)/vivado/create_vivado_project.tcl -tclargs 
 
 # Petalinux
 .PHONY: sw
@@ -44,7 +44,7 @@ pfm:
 	$(Q) /bin/cp $(DIR_PETALINUX)/images/linux/image.ub $(TMPDIR)/image
 	
 	# Not "sdspfm" any more
-	xsct -sdx $(DIR_SRC)/platform/sdx_pfm.tcl 
+	$(Q) xsct -sdx $(DIR_SRC)/platform/sdx_pfm.tcl $(PF_NAME) $(TMPDIR)/image
 
 
 # Build hello world
@@ -59,8 +59,27 @@ hello_world:
 
 # SDSoC platform (w/ prebuilt data)
 .PHONY: pfm2
-pfm2: hello_world
+pfm2:
+	#  hello_world
+	$(Q) /bin/echo "... Creating (Prebuilt) Platform ..."
 
+	# Copy image.ub
+	$(Q) $(eval TMPDIR=$(shell /bin/mktemp -d))
+	$(Q) /bin/mkdir -p $(TMPDIR)/image
+	$(Q) /bin/cp $(DIR_PETALINUX)/images/linux/image.ub $(TMPDIR)/image
+
+	# Copy necessary files
+	# portinfo.c/h, apsys_0.xml, bitstream.bit, <platform>.hdf, partitions.xml
+	$(Q) $(eval TMPDIR2=$(shell /bin/mktemp -d))
+
+	$(Q) cp _sds/swstubs/portinfo.c     $(TMPDIR2)
+	$(Q) cp _sds/swstubs/portinfo.h     $(TMPDIR2)
+	$(Q) cp _sds/.llvm/partitions.xml   $(TMPDIR2)
+	$(Q) cp _sds/.llvm/apsys_0.xml      $(TMPDIR2)
+	$(Q) cp $(DIR_VIVADO)/$(PF_NAME).sdk/$(PF_NAME)_wrapper.hdf $(TMPDIR2)/$(PF_NAME).hdf
+	$(Q) cp _sds/p0/vpl/system.bit      $(TMPDIR2)/bitstream.bit
+
+	$(Q) xsct -sdx $(DIR_SRC)/platform/sdx_pfm.tcl $(PF_NAME) $(TMPDIR)/image $(TMPDIR2)
 
 # 
 .PHONY: all
