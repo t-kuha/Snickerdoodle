@@ -1,4 +1,6 @@
 /vivado
 /.Xil
+/petalinux
+/sdb_simple
 *.jou
 *.log
