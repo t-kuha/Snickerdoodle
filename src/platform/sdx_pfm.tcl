@@ -30,6 +30,7 @@ system \
 ::scw::get_supported_proc -os linux
 ::scw::get_supported_proc -os freertos
 ::scw::get_supported_proc -os standalone
+
 domain \
 -name {Linux} \
 -os {linux} \
@@ -37,7 +38,7 @@ domain \
 -display-name {Linux} \
 -desc {} \
 -runtime {cpp} \
--image {/home/pentaxmedical/Snickerdoodle/sdb_simple/images/linux}
+-image ${DIR_PETALINUX}/images/linux
 
 platform -write
 platform -generate
