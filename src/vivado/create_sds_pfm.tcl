@@ -1,4 +1,5 @@
-set_property PFM_NAME "krtkl.com:snickerdoodle_black:snickerdoodle_black:1.0" [get_files [get_property FILE_NAME [get_bd_designs]]]
+# Name must be the same as platform name
+set_property PFM_NAME "krtkl.com:snickerdoodle_black:sdb_simple:1.0" [get_files [get_property FILE_NAME [get_bd_designs]]]
 
 set_property PFM.CLOCK { \
 clk_out1 {id "2" is_default "true"  proc_sys_reset "proc_sys_reset_0" } \
