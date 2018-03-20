@@ -68,8 +68,7 @@ pfm2:
 	$(Q) /bin/mkdir -p $(TMPDIR)/image
 	$(Q) /bin/cp $(DIR_PETALINUX)/images/linux/image.ub $(TMPDIR)/image
 
-	# Copy necessary files
-	# portinfo.c/h, apsys_0.xml, bitstream.bit, <platform>.hdf, partitions.xml
+	# Copy portinfo.c/h, apsys_0.xml, bitstream.bit, <platform>.hdf, partitions.xml
 	$(Q) $(eval TMPDIR2=$(shell /bin/mktemp -d))
 
 	$(Q) cp _sds/swstubs/portinfo.c     $(TMPDIR2)
@@ -90,3 +89,6 @@ all:
 clean:
 	$(Q) -rm -rf vivado
 	$(Q) -rm -rf sdb_simple
+	$(Q) -rm -rf hello_world
+	$(Q) -rm -rf platform
+	$(Q) -rm -rf sd_card _sds
