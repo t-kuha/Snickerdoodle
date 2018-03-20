@@ -2,7 +2,7 @@
 # Create Vivado project
 hw:
 	echo "... Creating Vivado Project ..."
-	vivado -mode tcl -source src/vivado/create_vivado_project.tcl
+	vivado -mode batch -source src/vivado/create_vivado_project.tcl
 
 # Petalinux
 sw:
