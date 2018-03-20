@@ -1,6 +1,22 @@
-/vivado
+# Automatically-generated
 /.Xil
+
+# Vivado project directory
+/vivado
+
+# Petalinux workspace
 /petalinux
 /sdb_simple
+
+# Platform
+/platform
+
+# hello_world program
+/hello_world
+
+# SDSoC intermediate file
+/_sds
+
+# Journal & log
 *.jou
 *.log
