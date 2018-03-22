@@ -34,7 +34,9 @@ petalinux-create -t project -n ${PRJ_NAME}  --template zynq
 petalinux-config -p ${PRJ_NAME} --get-hw-description=./vivado/sdb_simple.sdk
 
 # Apply modification for SDSoC platform according to UG1146 (SDSoC Environment Platform Development Guide)
+## Add SDSoC driver
 petalinux-config -p ${PRJ_NAME} -c kernel
+## Add libstdc++
 petalinux-config -p ${PRJ_NAME} -c rootfs
 
 # Copy device tree source (system-user.dtsi)

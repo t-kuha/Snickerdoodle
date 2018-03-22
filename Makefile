@@ -8,7 +8,7 @@ DIR_SRC=src
 ## Vivado project directory
 DIR_VIVADO=vivado
 ## Working directory for Petalinux
-DIR_PETALINUX=$(PF_NAME)
+DIR_PETALINUX=petalinux
 ## Output directory of (1st) SDSoC platform
 DIR_PF_FIRST=pfm1
 ## Output directory of SDSoC platform (w/ prebuilt data)
