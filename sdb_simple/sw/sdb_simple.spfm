@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdx:platform sdx:vendor="xilinx.com"
+              sdx:library="sdx"
+              sdx:name="sdb_simple"
+              sdx:version="1.0"
+              sdx:schemaVersion="1.0"
+              xmlns:sdx="http://www.xilinx.com/sdx">
+    <sdx:description>
+sdb_simple
+    </sdx:description>
+    <sdx:systemConfigurations sdx:defaultConfiguration="linux">
+        <sdx:configuration sdx:name="linux"
+                           sdx:displayName="linux"
+                           sdx:defaultProcessorGroup="linux"
+                           sdx:runtimes="cpp">
+            <sdx:description></sdx:description>
+            <sdx:prebuilt sdx:data="linux/linux/prebuilt"/>
+            <sdx:bootImages sdx:default="standard">
+                <sdx:image sdx:name="standard"
+                            sdx:bif="linux/boot/linux.bif"
+                            sdx:imageData="linux/linux/image"
+                            sdx:mountPath="/mnt"
+                            sdx:readme="linux/boot/generic.readme"
+                            />
+            </sdx:bootImages>
+            <sdx:processorGroup sdx:name="linux"
+                                sdx:displayName="linux"
+                                sdx:cpuType="cortex-a9">
+                <sdx:os sdx:name="linux"
+                        sdx:displayName="linux"
+                />
+            </sdx:processorGroup>
+        </sdx:configuration>
+    </sdx:systemConfigurations>
+</sdx:platform>
