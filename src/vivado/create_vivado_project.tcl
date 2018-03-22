@@ -1,7 +1,7 @@
 # For Snickerdoodle black
 
 # Setting
-set PRJ_NAME    sdb_simple
+set PRJ_NAME    [lindex $argv 0]
 set PRJ_DIR     vivado
 set SRC_DIR     src/vivado
 
@@ -61,7 +61,7 @@ save_bd_design
 # Generate HW
 set SRCS [get_files ${PRJ_DIR}/${PRJ_NAME}.srcs/sources_1/bd/${PRJ_NAME}/${PRJ_NAME}.bd]
 generate_target all ${SRCS}
-file mkdir ${PRJ_DIR}/sdb_simple.sdk
+file mkdir ${PRJ_DIR}/${PRJ_NAME}.sdk
 write_hwdef -force  -file ${PRJ_DIR}/${PRJ_NAME}.sdk/${PRJ_NAME}_wrapper.hdf
 
 # Export DSA

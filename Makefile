@@ -22,7 +22,7 @@ DIR_HW=hello_world
 .PHONY: hw
 hw:
 	$(Q) /bin/echo "... Creating Vivado Project ..."
-	$(Q) vivado -mode batch -source $(DIR_SRC)/vivado/create_vivado_project.tcl -tclargs 
+	$(Q) vivado -mode batch -source $(DIR_SRC)/vivado/create_vivado_project.tcl -tclargs $(PF_NAME)
 
 # Petalinux
 .PHONY: sw
