@@ -13,10 +13,6 @@
 # hello_world program
 /hello_world
 
-# SDSoC intermediate file
-/_sds
-/sd_card
-
 # Journal & log
 *.jou
 *.log

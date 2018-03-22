@@ -56,8 +56,8 @@ hello_world:
 	$(Q) /bin/echo "... Creating (Prebuilt) Image ..."
 
 	$(Q) /bin/mkdir -p $(DIR_HW)
-	$(Q) sds++ -sds-pf $(DIR_PF_FIRST)/$(PF_NAME)/export/$(PF_NAME) $(DIR_SRC)/helloworld/helloworld.cpp -c -o $(DIR_HW)/$@.o
-	$(Q) sds++ -sds-pf $(DIR_PF_FIRST)/$(PF_NAME)/export/$(PF_NAME) $(DIR_HW)/$@.o -o $(DIR_HW)/$@.elf
+	$(Q) cd $(DIR_HW); sds++ -sds-pf ../$(DIR_PF_FIRST)/$(PF_NAME)/export/$(PF_NAME) ../$(DIR_SRC)/hello_world/hello_world.cpp -c -o $@.o
+	$(Q) cd $(DIR_HW); sds++ -sds-pf ../$(DIR_PF_FIRST)/$(PF_NAME)/export/$(PF_NAME) $@.o -o $@.elf
 
 
 # SDSoC platform (w/ prebuilt data)
