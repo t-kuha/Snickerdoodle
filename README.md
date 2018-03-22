@@ -26,21 +26,23 @@ $ make hw
 # Setup petalinux
 source ~/petalinux/settings.sh 
 
+# Set petalinux project name
+export PRJ_NAME=petalinux
+
 # Create & configure project
-petalinux-create -t project -n sdb_simple  --template zynq
-petalinux-config -p sdb_simple --get-hw-description=./vivado/sdb_simple.sdk
+petalinux-create -t project -n ${PRJ_NAME}  --template zynq
+petalinux-config -p ${PRJ_NAME} --get-hw-description=./vivado/sdb_simple.sdk
 
 # Apply modification for SDSoC platform according to UG1146 (SDSoC Environment Platform Development Guide)
-petalinux-config -p sdb_simple -c kernel
-petalinux-config -p sdb_simple -c rootfs
+petalinux-config -p ${PRJ_NAME} -c kernel
+petalinux-config -p ${PRJ_NAME} -c rootfs
 
 # Copy device tree source (system-user.dtsi)
-cp system-user.dtsi ./sdb_simple/project-spec/meta-user/r
-ecipes-bsp/device-tree/files/system-user.dtsi
+cp src/petalinux/system-user.dtsi ./sdb_simple/project-spec/meta-user/recipes-bsp/device-tree/files/system-user.dtsi
 
 # Start build
-petalinux-build -p sdb_simple
+petalinux-build -p ${PRJ_NAME}
 
 # Package BSP
-petalinux-package --bsp -o sdb_simple.bsp -p sdb_simple
+petalinux-package --bsp -o ${PRJ_NAME}.bsp -p ${PRJ_NAME}
 ```
