@@ -42,7 +42,6 @@ system \
 
 ::scw::get_supported_os
 ::scw::get_supported_proc -os linux
-# ::scw::get_supported_proc -os freertos
 # ::scw::get_supported_proc -os standalone
 
 domain \
@@ -53,7 +52,6 @@ domain \
 -desc {} \
 -runtime {cpp} \
 -image ${DIR_IMAGE} 
-#/images/linux
 
 # Specify prebuilt data
 if { $argc == 4 } {
