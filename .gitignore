@@ -6,7 +6,6 @@
 
 # Petalinux workspace
 /petalinux
-/sdb_simple
 
 # Platform
 /pfm*
