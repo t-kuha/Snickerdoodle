@@ -26,11 +26,14 @@ hw:
 	$(Q) /bin/echo "... Creating Vivado Project ..."
 	$(Q) vivado -mode batch -source $(DIR_SRC)/vivado/create_vivado_project.tcl -tclargs $(PF_NAME)
 
+
 # Petalinux
 .PHONY: sw
 sw:
 	$(Q) /bin/echo "... Creating Petalinux ..."
-	$(Q) source 
+
+	$(Q) petalinux-create -t project -s $(DIR_SRC)/petalinux/petalinux.bsp
+	$(Q) petalinux-build -p $(DIR_PETALINUX)
 
 
 # SDSoC platform
