@@ -9,7 +9,7 @@
 /sdb_simple
 
 # Platform
-/platform
+/pfm*
 
 # hello_world program
 /hello_world
