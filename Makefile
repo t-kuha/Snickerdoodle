@@ -29,7 +29,7 @@ hw:
 
 # Petalinux
 .PHONY: sw
-sw:
+sw: hw
 	$(Q) /bin/echo "... Creating Petalinux ..."
 
 	$(Q) petalinux-create -t project -s $(DIR_SRC)/petalinux/petalinux.bsp
@@ -38,7 +38,7 @@ sw:
 
 # SDSoC platform
 .PHONY: pfm
-pfm:
+pfm: sw
 	$(Q) /bin/echo "... Creating (Initial) Platform ..."
 	
 	# Delete already existing platform directory
@@ -55,7 +55,7 @@ pfm:
 
 # Build hello world
 .PHONY: hello_world
-hello_world:
+hello_world: pfm
 	$(Q) /bin/echo "... Creating (Prebuilt) Image ..."
 
 	$(Q) /bin/mkdir -p $(DIR_HW)
@@ -65,7 +65,7 @@ hello_world:
 
 # SDSoC platform (w/ prebuilt data)
 .PHONY: pfm2
-pfm2:
+pfm2: hello_world
 	#  hello_world
 	$(Q) /bin/echo "... Creating (Prebuilt) Platform ..."
 
@@ -91,7 +91,9 @@ pfm2:
 
 # 
 .PHONY: all
-all:
+all: pfm2
+	# Copy generated platform into top directory
+	$(Q) cp -R $(DIR_PF_PREBUILT)/$(PF_NAME)/export/$(PF_NAME) .
 
 
 # Clean all output
@@ -101,4 +103,3 @@ clean:
 	$(Q) -rm -rf $(DIR_HW)
 	$(Q) -rm -rf $(DIR_PF_FIRST)
 	$(Q) -rm -rf $(DIR_PF_PREBUILT)
-	$(Q) -rm -rf sd_card _sds
