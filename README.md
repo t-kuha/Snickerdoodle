@@ -24,7 +24,7 @@ $ make hw
 
 ```bash
 # Setup petalinux
-source ~/petalinux/settings.sh 
+source <Petalinux Installation DIrectory>/settings.sh 
 
 # Set petalinux project name
 export PRJ_NAME=petalinux
@@ -38,7 +38,7 @@ petalinux-config -p ${PRJ_NAME} -c kernel
 petalinux-config -p ${PRJ_NAME} -c rootfs
 
 # Copy device tree source (system-user.dtsi)
-cp src/petalinux/system-user.dtsi ./sdb_simple/project-spec/meta-user/recipes-bsp/device-tree/files/system-user.dtsi
+cp src/petalinux/system-user.dtsi ${PRJ_NAME}/project-spec/meta-user/recipes-bsp/device-tree/files/system-user.dtsi
 
 # Start build
 petalinux-build -p ${PRJ_NAME}
