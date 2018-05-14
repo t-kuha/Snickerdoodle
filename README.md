@@ -3,7 +3,7 @@
 SDSoC platform for Snickerdoodle Black (Compatible with SDSoC 2017.4)
 
 #### simple
-	-　Simple SDSoC Platform
+  -　Simple SDSoC Platform
 
 
 #### How to build
