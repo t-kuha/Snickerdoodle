@@ -1,0 +1,18 @@
+# Automatically-generated
+/.Xil
+
+# Vivado project directory
+/vivado
+
+# Petalinux workspace
+/petalinux
+
+# Platform
+/pfm*
+
+# hello_world program
+/hello_world
+
+# Journal & log
+*.jou
+*.log
