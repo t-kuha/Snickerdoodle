@@ -23,8 +23,12 @@ Q ?= @
 # Create Vivado project
 .PHONY: hw
 hw:
-	$(Q) /bin/echo "... Creating Vivado Project ..."
-	$(Q) vivado -mode batch -source $(DIR_SRC)/vivado/create_vivado_project.tcl -tclargs $(PF_NAME)
+	$(Q) if [ -e vivado/$(PF_NAME).xpr ]; then \
+		/bin/echo "... Skipping Vivado Project ..."; \
+	else \
+		/bin/echo "... Creating Vivado Project ..."; \
+		vivado -mode batch -source $(DIR_SRC)/vivado/create_vivado_project.tcl -tclargs $(PF_NAME); \
+	fi
 
 
 # Petalinux
