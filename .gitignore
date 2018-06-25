@@ -5,7 +5,7 @@
 /vivado
 
 # Petalinux workspace
-/petalinux
+/sdb_simple_plnx
 
 # Platform
 /pfm*
