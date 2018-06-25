@@ -20,8 +20,14 @@ add_files -norecurse ${PRJ_DIR}/${PRJ_NAME}.srcs/sources_1/bd/${PRJ_NAME}/hdl/${
 # Block design
 ## PS
 create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.5 processing_system7_0
-apply_bd_automation -rule xilinx.com:bd_rule:processing_system7 -config {make_external "FIXED_IO, DDR" apply_board_preset "1" Master "Disable" Slave "Disable" }  [get_bd_cells processing_system7_0]
+#apply_bd_automation -rule xilinx.com:bd_rule:processing_system7 -config {make_external "FIXED_IO, DDR" apply_board_preset "1" Master "Disable" Slave "Disable" }  [get_bd_cells processing_system7_0]
+make_bd_intf_pins_external  [get_bd_intf_pins processing_system7_0/DDR]
+set_property name DDR [get_bd_intf_ports DDR_0]
+make_bd_intf_pins_external  [get_bd_intf_pins processing_system7_0/FIXED_IO]
+set_property name FIXED_IO [get_bd_intf_ports FIXED_IO_0]
 set_property -dict [list CONFIG.PCW_USE_M_AXI_GP0 {0} CONFIG.PCW_USE_FABRIC_INTERRUPT {1} CONFIG.PCW_IRQ_F2P_INTR {1}] [get_bd_cells processing_system7_0]
+#set_property -dict [list CONFIG.PCW_USE_S_AXI_ACP {0}] [get_bd_cells processing_system7_0]
+#set_property -dict [list CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ {100}] [get_bd_cells processing_system7_0]
 
 ## Resets
 create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_0
@@ -29,7 +35,7 @@ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_1
 create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 proc_sys_reset_2
 
 ## Clocking wizard
-create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:5.4 clk_wiz_0
+create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_0
 set_property -dict [list CONFIG.ENABLE_CLOCK_MONITOR {false} CONFIG.CLKOUT2_USED {true} CONFIG.CLKOUT3_USED {true} CONFIG.CLKOUT2_REQUESTED_OUT_FREQ {150.000} CONFIG.CLKOUT3_REQUESTED_OUT_FREQ {200.000} CONFIG.PRIMITIVE {MMCM} CONFIG.MMCM_DIVCLK_DIVIDE {1} CONFIG.MMCM_CLKFBOUT_MULT_F {12.000} CONFIG.MMCM_CLKOUT0_DIVIDE_F {12.000} CONFIG.MMCM_CLKOUT1_DIVIDE {8} CONFIG.MMCM_CLKOUT2_DIVIDE {6} CONFIG.NUM_OUT_CLKS {3} CONFIG.CLKOUT1_JITTER {115.831} CONFIG.CLKOUT1_PHASE_ERROR {87.180} CONFIG.CLKOUT2_JITTER {107.567} CONFIG.CLKOUT2_PHASE_ERROR {87.180} CONFIG.CLKOUT3_JITTER {102.086} CONFIG.CLKOUT3_PHASE_ERROR {87.180} CONFIG.RESET_TYPE {ACTIVE_LOW} CONFIG.RESET_PORT {resetn}] [get_bd_cells clk_wiz_0]
 
 ## Concat
