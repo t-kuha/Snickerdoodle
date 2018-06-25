@@ -29,7 +29,8 @@ export PRJ_NAME=petalinux
 
 # Create & configure project
 petalinux-create -t project -n ${PRJ_NAME}  --template zynq
-petalinux-config -p ${PRJ_NAME} --get-hw-description=./vivado/sdb_simple.sdk
+# Load ${PRJ_NAME}.dsa
+petalinux-config -p ${PRJ_NAME} --get-hw-description=./vivado
 
 # Apply modification for SDSoC platform according to UG1146 (SDSoC Environment Platform Development Guide)
 ## Add SDSoC driver
