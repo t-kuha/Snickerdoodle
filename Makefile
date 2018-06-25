@@ -8,7 +8,7 @@ DIR_SRC=src
 ## Vivado project directory
 DIR_VIVADO=vivado
 ## Working directory for Petalinux
-DIR_PETALINUX=petalinux
+DIR_PETALINUX=$(PF_NAME)_plnx
 ## Output directory of (1st) SDSoC platform
 DIR_PF_FIRST=pfm1
 ## Output directory of SDSoC platform (w/ prebuilt data)
@@ -34,11 +34,13 @@ hw:
 # Petalinux
 .PHONY: sw
 sw: hw
-	$(Q) /bin/echo "... Creating Petalinux ..."
-
-	$(Q) petalinux-create -t project -s $(DIR_SRC)/petalinux/petalinux.bsp
-	$(Q) petalinux-build -p $(DIR_PETALINUX)
-
+	$(Q) if [ -d $(DIR_PETALINUX) ]; then \
+		/bin/echo "... Skipping SW (Petalinux) project ..."; \
+	else \
+		/bin/echo "... Creating Petalinux ..."; \
+		petalinux-create -t project -s $(DIR_SRC)/petalinux/petalinux.bsp; \
+		petalinux-build -p $(DIR_PETALINUX); \
+	fi
 
 # SDSoC platform
 .PHONY: pfm
@@ -84,12 +86,12 @@ pfm2: hello_world
 	# Copy portinfo.c/h, apsys_0.xml, bitstream.bit, <platform>.hdf, partitions.xml
 	$(Q) $(eval TMPDIR2=$(shell /bin/mktemp -d))
 
-	$(Q) cp _sds/swstubs/portinfo.c     $(TMPDIR2)
-	$(Q) cp _sds/swstubs/portinfo.h     $(TMPDIR2)
-	$(Q) cp _sds/.llvm/partitions.xml   $(TMPDIR2)
-	$(Q) cp _sds/.llvm/apsys_0.xml      $(TMPDIR2)
+	$(Q) cp $(DIR_HW)/_sds/swstubs/portinfo.c     $(TMPDIR2)
+	$(Q) cp $(DIR_HW)/_sds/swstubs/portinfo.h     $(TMPDIR2)
+	$(Q) cp $(DIR_HW)/_sds/.llvm/partitions.xml   $(TMPDIR2)
+	$(Q) cp $(DIR_HW)/_sds/.llvm/apsys_0.xml      $(TMPDIR2)
 	$(Q) cp $(DIR_VIVADO)/$(PF_NAME).sdk/$(PF_NAME)_wrapper.hdf $(TMPDIR2)/$(PF_NAME).hdf
-	$(Q) cp _sds/p0/vpl/system.bit      $(TMPDIR2)/bitstream.bit
+	$(Q) cp $(DIR_HW)/_sds/p0/vpl/system.bit      $(TMPDIR2)/bitstream.bit
 
 	$(Q) xsct -sdx $(DIR_SRC)/platform/sdx_pfm.tcl $(PF_NAME) $(DIR_PF_PREBUILT) $(TMPDIR)/image $(TMPDIR2)
 

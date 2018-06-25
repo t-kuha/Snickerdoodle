@@ -25,7 +25,7 @@ set DIR_SRC       src
 ## Vivado project directory
 set DIR_VIVADO    vivado
 ## Working directory for Petalinux
-set DIR_PETALINUX petalinux
+set DIR_PETALINUX ${PF_NAME}_plnx
 
 
 platform -name ${PF_NAME} \
